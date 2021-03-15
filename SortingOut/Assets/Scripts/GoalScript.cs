@@ -22,14 +22,13 @@ public class GoalScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         //the number of activated goals plus one when it's triggered
-        
         GameManager.instance.ActivatedNum++;
         Debug.Log("activated"+GameManager.instance.ActivatedNum);
     }
     
     private void OnTriggerExit2D(Collider2D other)
     {
-        //isActivated = false;
+        // the number of activated goals minus one when the object exit
         GameManager.instance.ActivatedNum--;
         Debug.Log("not activated"+GameManager.instance.ActivatedNum);
     }

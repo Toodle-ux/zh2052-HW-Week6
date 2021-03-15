@@ -7,24 +7,19 @@ using Vector3 = UnityEngine.Vector3;
 
 public class PlayerControl : MonoBehaviour
 {
-    // the rigidbody of the player
-    private BoxCollider2D boxCollider;
-    private Rigidbody2D rb2D;
-    
+
     // make sure the players can move one grid each time
     private bool isMoving;
 
+    // the time to move for each step
     private float timeToMove = 0.2f;
 
+    // start and end position for each step
     private Vector3 origPos, targetPos;
 
-    // public float forceAmount = 5;
-    
     // Start is called before the first frame update
     void Start()
     {
-        boxCollider = this.gameObject.GetComponent<BoxCollider2D>();
-        rb2D = this.gameObject.GetComponent<Rigidbody2D>();
 
     }
 
@@ -33,17 +28,11 @@ public class PlayerControl : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W) && !isMoving)
         {
-            // disable the box collider so that the player itself won't be raycasted
-            boxCollider.enabled = false;
-            
-            //raycast on the up
-            RaycastHit2D hitW = Physics2D.Raycast(transform.position, Vector2.up);
-            
-            // enable the box collider again
-            boxCollider.enabled = true;
 
-            // move the player when there isn't a wall on the up
-            // this part is adapted from Alessia's code
+            //raycast on the up to check if there is a wall
+            RaycastHit2D hitW = Physics2D.Raycast(transform.position, Vector2.up,1f,LayerMask.GetMask("Wall"),-1,1);
+
+            // move the player when there isn't a wall
             if (hitW.collider != null && hitW.distance < 0.9f && hitW.collider.gameObject.tag == "CantMove")
             {
                 Debug.Log("hit a wall");
@@ -57,9 +46,7 @@ public class PlayerControl : MonoBehaviour
         // the rest WSAD controller
         if (Input.GetKey(KeyCode.A) && !isMoving)
         {
-            boxCollider.enabled = false;
-            RaycastHit2D hitA = Physics2D.Raycast(transform.position, Vector2.left);
-            boxCollider.enabled = true;
+            RaycastHit2D hitA = Physics2D.Raycast(transform.position, Vector2.left,1f,LayerMask.GetMask("Wall"),-1,1);
 
             if (hitA.collider != null && hitA.distance < 0.9f && hitA.collider.gameObject.tag == "CantMove")
             {
@@ -73,9 +60,7 @@ public class PlayerControl : MonoBehaviour
         
         if (Input.GetKey(KeyCode.S) && !isMoving)
         {
-            boxCollider.enabled = false;
-            RaycastHit2D hitS = Physics2D.Raycast(transform.position, Vector2.down);
-            boxCollider.enabled = true;
+            RaycastHit2D hitS = Physics2D.Raycast(transform.position, Vector2.down,1f,LayerMask.GetMask("Wall"),-1,1);
 
             if (hitS.collider != null && hitS.distance < 0.9f && hitS.collider.gameObject.tag == "CantMove")
             {
@@ -89,9 +74,7 @@ public class PlayerControl : MonoBehaviour
         
         if (Input.GetKey(KeyCode.D) && !isMoving)
         {
-            boxCollider.enabled = false;
-            RaycastHit2D hitD = Physics2D.Raycast(transform.position, Vector2.right);
-            boxCollider.enabled = true;
+            RaycastHit2D hitD = Physics2D.Raycast(transform.position, Vector2.right,1f,LayerMask.GetMask("Wall"),-1,1);
 
             if (hitD.collider != null && hitD.distance < 0.9f && hitD.collider.gameObject.tag == "CantMove")
             {
@@ -107,7 +90,6 @@ public class PlayerControl : MonoBehaviour
     }
 
     // move the player by grid
-    // this part is adapted from the tutorials
     private IEnumerator MovePlayer(Vector3 direction)
     {
         // make sure that the player can only move one grid each time

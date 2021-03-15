@@ -15,7 +15,11 @@ public class GameManager : MonoBehaviour
     public int ActivatedNum
     {
         get { return activatedNum; }
-        set { activatedNum = value; }
+        set
+        {
+            activatedNum = value; 
+            Debug.Log("Activated Number: " + activatedNum);
+        }
     }
 
     // set the goalNum to -1, so that goalNum != activatedNum in the beginning
@@ -24,11 +28,16 @@ public class GameManager : MonoBehaviour
     public int GoalNum
     {
         get { return goalNum; }
-        set { goalNum = value; }
+        set
+        {
+            goalNum = value;
+            Debug.Log("Goal Number: " + goalNum);
+        }
     }
 
     private void Awake()
     {
+        // singleton
         if (instance == null)
         {
             DontDestroyOnLoad(gameObject);
@@ -46,9 +55,8 @@ public class GameManager : MonoBehaviour
         //when all the goals are activated
         if (ActivatedNum == GoalNum)
         {
-            SceneManager.LoadScene(1);
-            GoalNum = -1;
-            ActivatedNum = 0;
+            GameManager.instance.GetComponent<ASCIILevelLoader>().CurrentLevel++;
+            
         }
     }
     
